@@ -9,23 +9,39 @@ import {
   AppRegistry,
   StyleSheet,
   Text,
+  Button,
   View
 } from 'react-native';
 
+import Analytics from 'mobile-center-analytics';
+import Crashes from 'mobile-center-crashes';
+
 export default class sampleApp extends Component {
+
+ sendEvent() {
+   Analytics.trackEvent('My custom event', {
+     prop1: 'Custom property',
+     timeStamp: new Date().toISOString()
+   })
+ }
+
+ nativeCrash() {
+   Crashes.generateTestCrash();
+ }
+
+ jsCrash() {
+   throw new Error("My Custom Error");
+ }
+
   render() {
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>
           Welcome to React Native!
         </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.ios.js
-        </Text>
-        <Text style={styles.instructions}>
-          Press Cmd+R to reload,{'\n'}
-          Cmd+D or shake for dev menu
-        </Text>
+        <Button title="Send Event" onPress={() => this.sendEvent()} />
+        <Button title="Native Crash" onPress={() => this.nativeCrash()} />
+        <Button title="JS Crash" onPress={() => this.jsCrash()} />
       </View>
     );
   }
